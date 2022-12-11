@@ -1,6 +1,10 @@
 // import required libraries.
 import * as dotenv from 'dotenv';
 import createServer from '@app/server';
+import basicAuth from 'express-basic-auth';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
 // load .env variables.
 dotenv.config();
 
@@ -15,6 +19,36 @@ const port: number = parseInt(process.env.PORT as string, 10);
 
 // create a server instance.
 const app = createServer();
+
+// swagger setup.
+const swaggerDefinition = {
+    openapi: '3.0.0',
+    info: {
+        title: 'Todo APIs',
+        version: '1.0.0',
+    },
+    servers: [
+        {
+            url: `http://localhost:${port}/`,
+            description: 'Local Todo Server.'
+        }
+    ],
+};
+const swaggerOptions = {
+    swaggerDefinition,
+    // Paths to files containing OpenAPI definitions
+    apis: ['./src/modules/**/*.swagger.yaml'],
+};
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use(
+    '/docs',
+    basicAuth({
+        users: { 'admin': 'swagger' },
+        challenge: true,
+    }),
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec),
+);
 
 // start listening for any request.
 app.listen(port, () => {
