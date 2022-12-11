@@ -6,7 +6,7 @@ interface TokenData {
 
 export default class TokenHelper {
     public generateToken(data: TokenData) {
-        const token = jwt.sign(data, process.env.JWT_TOKEN || 'secret-token');
+        const token = jwt.sign(data, process.env.JWT_TOKEN || 'secret-token', { expiresIn: '90d' });
         return token;
     }
 
