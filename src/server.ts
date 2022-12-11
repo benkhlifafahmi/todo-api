@@ -1,6 +1,7 @@
-import express, {Application, Request, Response} from 'express';
+import express, {Application, NextFunction, Request, Response} from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import { authRoute } from './modules/auth/auth.route';
 
 
 export default function createServer() {
@@ -14,10 +15,23 @@ export default function createServer() {
     app.use(cors());
     app.use(express.json());
     
+    // setup our routes.
     app.get('/', (req: Request, res: Response) => {
         return res.status(200).json({
             message: 'Hello World!'
         });
+    });
+    app.use('/auth', authRoute);
+
+    // handle errors
+    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+        return res.status(500)
+            .json({
+                success: false,
+                message: err.message,
+                exception: err.name,
+                stack: process.env.NODE_ENV === 'dev' ? err.stack : undefined,
+            });
     });
 
     return app;
