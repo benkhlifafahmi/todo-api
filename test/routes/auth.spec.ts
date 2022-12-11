@@ -46,38 +46,38 @@ describe('[*] User Authentication test.', function () {
             })
             .expect(401, done);
     });
-    it('GET /auth/singup should return 404', (done) => {
+    it('GET /auth/signup should return 404', (done) => {
         request(app).get('/auth/singin').expect(404, done);
     });
-    it('POST /auth/singup should raise an error when sending missing user information', (done) => {
+    it('POST /auth/signup should raise an error when sending missing user information', (done) => {
         request(app)
-            .post('/auth/singup')
+            .post('/auth/signup')
             .send({
                 email: userData.email,
             })
             .expect(500, done);
     });
-    it('POST /auth/singup should raise an error when sending invalid (format) user information', (done) => {
+    it('POST /auth/signup should raise an error when sending invalid (format) user information', (done) => {
         request(app)
-            .post('/auth/singup')
+            .post('/auth/signup')
             .send({
                 email: userData.name,
                 password: userData.password,
             })
             .expect(500, done);
     });
-    it('POST /auth/singup should return 200 when sending valid user information', (done) => {
+    it('POST /auth/signup should return 200 when sending valid user information', (done) => {
         request(app)
-            .post('/auth/singup')
+            .post('/auth/signup')
             .send({
                 email: userData.email,
                 password: userData.password,
             })
             .expect(200, done);
     });
-    it('POST /auth/singup should raise an error when trying to signup with an already exisitng user information', (done) => {
+    it('POST /auth/signup should raise an error when trying to signup with an already exisitng user information', (done) => {
         request(app)
-            .post('/auth/singup')
+            .post('/auth/signup')
             .send({
                 email: userData.email,
                 password: userData.password,
