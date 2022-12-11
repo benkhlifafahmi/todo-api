@@ -83,7 +83,7 @@ describe('[*] User Authentication test.', function () {
                 email: userData.email,
                 password: userData.password,
             })
-            .expect(500, done);
+            .expect(401, done);
     });
     it('POST /auth/singin should return 200 when user information are valid and give us a token.', async () => {
         return request(app)
