@@ -64,7 +64,7 @@ describe('[*] User Authentication test.', function () {
                 email: userData.name,
                 password: userData.password,
             })
-            .expect(500, done);
+            .expect(400, done);
     });
     it('POST /auth/signup should return 200 when sending valid user information', (done) => {
         request(app)
@@ -72,6 +72,7 @@ describe('[*] User Authentication test.', function () {
             .send({
                 email: userData.email,
                 password: userData.password,
+                name: userData.name,
             })
             .expect(200, done);
     });
@@ -94,7 +95,9 @@ describe('[*] User Authentication test.', function () {
             .expect(200)
             .then((response) => {
                 expect(response.body).to.have.a.property('token');
-                expect(response.body).to.have.a.property('email').equal(userData.email);
+                expect(response.body?.user).to.have.a.property('id');
+                expect(response.body?.user).to.have.a.property('email').equal(userData.email);
+                expect(response.body?.user).to.have.a.property('name').equal(userData.name);
             });
     });
 });
