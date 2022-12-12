@@ -137,7 +137,7 @@ describe('[*] Tasks Management test.', function () {
             .expect(201)
             .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
-                expect(response.body).to.have.a.property('data');
+                expect(response.body).to.have.a.property('task');
                 expect(response.body.task).to.have.a.property('id');
                 taskId = response.body?.task?.id;
                 done();
@@ -146,7 +146,7 @@ describe('[*] Tasks Management test.', function () {
     });
     it('GET /tasks?completed=true should return zero completed task (no task is completed yet).', (done) => {
         request(app)
-            .get('/tasks')
+            .get('/tasks?completed=true')
             .set('x-api-key', tokenUserOne)
             .expect(200)
             .then((response) => {
@@ -159,7 +159,7 @@ describe('[*] Tasks Management test.', function () {
     });
     it('GET /tasks?completed=false should return one incompleted task by the user (task is not done yet as it was just created).', (done) => {
         request(app)
-            .get('/tasks')
+            .get('/tasks?completed=false')
             .set('x-api-key', tokenUserOne)
             .expect(200)
             .then((response) => {
@@ -227,7 +227,7 @@ describe('[*] Tasks Management test.', function () {
     });
     it('GET /tasks?completed=true should return one completed task by the user (task has been set to completed)..', (done) => {
         request(app)
-            .get('/tasks')
+            .get('/tasks?completed=true')
             .set('x-api-key', tokenUserOne)
             .expect(200)
             .then((response) => {
@@ -240,7 +240,7 @@ describe('[*] Tasks Management test.', function () {
     });
     it('GET /tasks?completed=false should return empty incompleted task by the user (task has been set to completed).', (done) => {
         request(app)
-            .get('/tasks')
+            .get('/tasks?completed=false')
             .set('x-api-key', tokenUserOne)
             .expect(200)
             .then((response) => {
@@ -304,7 +304,7 @@ describe('[*] Tasks Management test.', function () {
     });
     it('GET /tasks?completed=true should return empty completed task (task has been removed during previous test cases.).', (done) => {
         request(app)
-            .get('/tasks')
+            .get('/tasks?completed=true')
             .set('x-api-key', tokenUserOne)
             .expect(200)
             .then((response) => {
@@ -317,7 +317,7 @@ describe('[*] Tasks Management test.', function () {
     });
     it('GET /tasks?completed=false should return empty incompleted task by the user.', (done) => {
         request(app)
-            .get('/tasks')
+            .get('/tasks?completed=false')
             .set('x-api-key', tokenUserOne)
             .expect(200)
             .then((response) => {
