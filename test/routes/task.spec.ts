@@ -97,14 +97,15 @@ describe('[*] Tasks Management test.', function () {
     it('GET /tasks with providing the right token should return empty task for the user #1.', (done) => {
         request(app)
             .get('/tasks')
-            .set('x-api-token', tokenUserOne)
+            .set('x-api-key', tokenUserOne)
             .expect(200)
-            .end((response) => {
-                expect(response.body).to.have.a.property('success').equals(true);
-                expect(response.body).to.have.a.property('data');
-                expect(response.body.data?.length).eq(0);
+            .then((response) => {
+                expect(response?.body).to.have.a.property('success').equals(true);
+                expect(response?.body).to.have.a.property('data');
+                expect(response?.body?.data).length.is.empty;
                 done();
-            });
+            })
+            .catch(done);
     });
 
     // Crate a task test cases.
@@ -134,37 +135,40 @@ describe('[*] Tasks Management test.', function () {
             .set('x-api-key', tokenUserOne)
             .send({ title: 'My First Task!' })
             .expect(201)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
                 expect(response.body).to.have.a.property('data');
                 expect(response.body.task).to.have.a.property('id');
                 taskId = response.body?.task?.id;
                 done();
-            });
+            })
+            .catch(done);
     });
     it('GET /tasks?completed=true should return zero completed task (no task is completed yet).', (done) => {
         request(app)
             .get('/tasks')
-            .set('x-api-token', tokenUserOne)
+            .set('x-api-key', tokenUserOne)
             .expect(200)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
                 expect(response.body).to.have.a.property('data');
                 expect(response.body.data?.length).eq(0);
                 done();
-            });
+            })
+            .catch(done);
     });
     it('GET /tasks?completed=false should return one incompleted task by the user (task is not done yet as it was just created).', (done) => {
         request(app)
             .get('/tasks')
-            .set('x-api-token', tokenUserOne)
+            .set('x-api-key', tokenUserOne)
             .expect(200)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
                 expect(response.body).to.have.a.property('data');
                 expect(response.body.data?.length).eq(1);
                 done();
-            });
+            })
+            .catch(done);
     });
 
 
@@ -200,48 +204,52 @@ describe('[*] Tasks Management test.', function () {
             .set('x-api-key', tokenUserOne)
             .send({ completed: true })
             .expect(200)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.property('success').to.be.true;
                 expect(response.body).to.have.property('task').to.have.property('id').eq(taskId);
                 expect(response.body).to.have.property('task').to.have.property('completed').to.be.true;
                 done();
-            });
+            })
+            .catch(done);
     });
     it('PUT /tasks/:id with the right data should update the task completed status.', (done) => {
         request(app)
             .put(`/tasks/${taskId}`)
             .set('x-api-key', tokenUserOne)
             .send({ title: 'The title was just updated' })
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.property('success').to.be.true;
                 expect(response.body).to.have.property('task').to.have.property('id').eq(taskId);
                 expect(response.body).to.have.property('task').to.have.property('title').to.be('The title was just updated');
                 done();
-            });
+            })
+            .catch(done);
     });
     it('GET /tasks?completed=true should return one completed task by the user (task has been set to completed)..', (done) => {
         request(app)
             .get('/tasks')
-            .set('x-api-token', tokenUserOne)
+            .set('x-api-key', tokenUserOne)
             .expect(200)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
                 expect(response.body).to.have.a.property('data');
                 expect(response.body.data?.length).eq(1);
                 done();
-            });
+            })
+            .catch(done);
     });
     it('GET /tasks?completed=false should return empty incompleted task by the user (task has been set to completed).', (done) => {
         request(app)
             .get('/tasks')
-            .set('x-api-token', tokenUserOne)
+            .set('x-api-key', tokenUserOne)
             .expect(200)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
                 expect(response.body).to.have.a.property('data');
                 expect(response.body.data?.length).eq(0);
                 done();
-            });
+            })
+            .catch(done);
     });
 
 
@@ -288,34 +296,37 @@ describe('[*] Tasks Management test.', function () {
             .delete(`/tasks/${taskId}`)
             .set('x-api-key', tokenUserOne)
             .expect(200)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.property('success').eq(true);
                 done();
-            });
+            })
+            .catch(done);
     });
     it('GET /tasks?completed=true should return empty completed task (task has been removed during previous test cases.).', (done) => {
         request(app)
             .get('/tasks')
-            .set('x-api-token', tokenUserOne)
+            .set('x-api-key', tokenUserOne)
             .expect(200)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
                 expect(response.body).to.have.a.property('task');
                 expect(response.body.data?.length).eq(0);
                 done();
-            });
+            })
+            .catch(done);
     });
     it('GET /tasks?completed=false should return empty incompleted task by the user.', (done) => {
         request(app)
             .get('/tasks')
-            .set('x-api-token', tokenUserOne)
+            .set('x-api-key', tokenUserOne)
             .expect(200)
-            .end((response) => {
+            .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
                 expect(response.body).to.have.a.property('data');
                 expect(response.body.data?.length).eq(0);
                 done();
-            });
+            })
+            .catch(done);
     });
     this.afterAll(function (done) {
         prisma.task.deleteMany({
