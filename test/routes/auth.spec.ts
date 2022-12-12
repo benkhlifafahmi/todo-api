@@ -100,4 +100,16 @@ describe('[*] User Authentication test.', function () {
                 expect(response.body?.user).to.have.a.property('name').equal(userData.name);
             });
     });
+    this.afterAll(function (done) {
+        prisma.user.deleteMany({
+            where: {}
+        })
+            .then(() => {
+                done();
+            })
+            .catch((e) => {
+                console.log(`[ERROR] error prisma ${e}`);
+                done();
+            });
+    });
 });
