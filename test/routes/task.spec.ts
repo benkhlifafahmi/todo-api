@@ -219,8 +219,9 @@ describe('[*] Tasks Management test.', function () {
             .send({ title: 'The title was just updated' })
             .then((response) => {
                 expect(response.body).to.have.property('success').to.be.true;
-                expect(response.body).to.have.property('task').to.have.property('id').eq(taskId);
-                expect(response.body).to.have.property('task').to.have.property('title').to.be('The title was just updated');
+                expect(response.body).to.have.property('task');
+                expect(response.body.task).to.have.property('id').eq(taskId);
+                expect(response.body.task).to.have.property('title').eq('The title was just updated');
                 done();
             })
             .catch(done);
@@ -309,7 +310,7 @@ describe('[*] Tasks Management test.', function () {
             .expect(200)
             .then((response) => {
                 expect(response.body).to.have.a.property('success').equals(true);
-                expect(response.body).to.have.a.property('task');
+                expect(response.body).to.have.a.property('data');
                 expect(response.body.data?.length).eq(0);
                 done();
             })
