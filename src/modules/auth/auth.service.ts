@@ -1,4 +1,3 @@
-
 import prisma from '@app/../prisma/db';
 
 export class AuthService {

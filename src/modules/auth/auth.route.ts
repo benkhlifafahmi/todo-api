@@ -1,7 +1,7 @@
-import Validator from "@app/helpers/validator.helper";
-import { Router } from "express";
-import { AuthController } from "./auth.controller";
-import { validateSignIn, validateSignUp } from "./auth.validate";
+import Validator from '@app/helpers/validator.helper';
+import { Router } from 'express';
+import { AuthController } from './auth.controller';
+import { validateSignIn, validateSignUp } from './auth.validate';
 
 class AuthRoute {
     router = Router();

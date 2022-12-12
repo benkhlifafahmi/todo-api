@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { AuthService } from "./auth.service";
+import { NextFunction, Request, Response } from 'express';
+import { AuthService } from './auth.service';
 import bcrypt from 'bcrypt';
-import TokenHelper from "@app/helpers/token.helper";
+import TokenHelper from '@app/helpers/token.helper';
 
 export class AuthController {
     authService: AuthService = new AuthService();
