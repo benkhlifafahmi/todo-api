@@ -10,8 +10,13 @@
     "outDir": "./dist",
     "resolveJsonModule": true,
     "paths": {
-      "@app/*": ["src/*"]
+      "@app/*": ["src/*"],
+      "@test/*": ["test/*"]
     },
+    "typeRoots": [
+      "./src/@types",
+      "./node_modules/@types"
+    ],
     /* Interop Constraints */
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,0 +1,155 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+          description: The user unique id.
+          example: 1
+        name:
+          type: string
+          description: The user full name.
+          example: Fahmi Ben Khlifa
+        email:
+          type: string
+          description: The user email address.
+          example: benkhlifa.fahmi@icloud.com
+        password:
+          type: string
+          description: The user encrypted (hash) password.
+          example: $2a$12$flvJxLowFXstBhTjOwa8buhMUFC5xuzw4ytrNxI8ugyX2lRIteZrG
+    SignInResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        code:
+          type: number
+          example: 200
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        user:
+          $ref: '#/components/schemas/User'
+    SignUpResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        code:
+          type: number
+          example: 200
+        user:
+          $ref: '#/components/schemas/User'
+    InvalidParameters:
+      type: object
+      properties:
+        success:
+          type: boolean
+        code:
+          type: number
+        exception:
+          type: string
+        message:
+          type: string
+        
+paths:
+  '/auth/signup':
+    post:
+      tags:
+        - Authentication APIs
+      summary: create a new user account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  required: true
+                  description: User full name.
+                  example: Fahmi Ben Khlifa
+                email:
+                  type: string
+                  required: true
+                  description: User email.
+                  example: benkhlifa.fahmi@icloud.com
+                password:
+                  type: string
+                  required: true
+                  description: User password.
+                  example: 123456
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignUpResponse'
+        '400':
+          description: Invalid parameters (email/password are malformed data)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+        '500':
+          description: Server Side Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+  '/auth/signin':
+    post:
+      tags:
+        - Authentication APIs
+      summary: Signin user with email and password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+                  description: User email.
+                  example: benkhlifa.fahmi@icloud.com
+                password:
+                  type: string
+                  required: true
+                  description: User password.
+                  example: 123456
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignInResponse'
+        '400':
+          description: Invalid parameters (email/password are malformed data)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+        '401':
+          description: Un-Authorized access.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+        '500':
+          description: Server Side Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+        

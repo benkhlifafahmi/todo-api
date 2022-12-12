@@ -1,0 +1,231 @@
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+  schemas:
+    UnAuthorizedAccess:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: number
+          example: 401
+        message:
+          type: string
+          example: 'Un-Authorized access'
+    Task:
+      type: object
+      properties:
+        id:
+          type: number
+          description: the task unique id.
+          example: 1
+        title: 
+          type: string
+          description: The task title.
+          example: Create a function to delete a task.
+        completed:
+          type: boolean
+          description: boolean flag to check if the task is completed or not.
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+paths:
+  /tasks:
+    get:
+      tags:
+        - Tasks APIs
+      summary: get the list of tasks
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: completed
+          schema:
+            type: boolean
+          description: a flag to filter the completed, incompleted or all tasks when listing them.        
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedAccess'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+        '500':
+          description: Server Side Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+    post:
+      tags:
+        - Tasks APIs
+      summary: create a new task.
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  required: true
+                  description: Task title
+                  example: My new task!
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task:
+                    $ref: '#/components/schemas/Task'
+                  success:
+                    type: boolean
+                    example: true
+        '401':
+          description: Unauthorized Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedAccess'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+        '500':
+          description: Server Side Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+  /tasks/{id}:
+    put:
+      tags:
+        - Tasks APIs
+      summary: Update task status or title.
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+          description: the id of the task we want to edit.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Task title
+                  example: My new task title!
+                completed:
+                  type: boolean
+                  description: the new status of the task
+                  example: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedAccess'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+        '500':
+          description: Server Side Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+    delete:
+      tags:
+        - Tasks APIs
+      summary: Delete specific task.
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+          description: the id of the task we want to edit.
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Task deleted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized Access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedAccess'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+        '500':
+          description: Server Side Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameters'
+    
