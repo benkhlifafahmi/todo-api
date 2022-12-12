@@ -6,6 +6,6 @@ const app = createServer();
 
 describe('Server checks', function() {
     it('server is created without any error', function(done) {
-        request(app).get('/').expect(200, done);
+        request(app).get('/ping').expect(200, done);
     });
 });

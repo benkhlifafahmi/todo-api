@@ -3,3 +3,9 @@ export const userData = {
     name: 'Fahmi Ben Khlifa',
     password: '123456',
 };
+
+export const userTwoData = {
+    email: 'erric.oneal@gmail.com',
+    name: 'Erric Oneal',
+    password: '123456',
+};
